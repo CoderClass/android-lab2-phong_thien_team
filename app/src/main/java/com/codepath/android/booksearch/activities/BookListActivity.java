@@ -1,5 +1,6 @@
 package com.codepath.android.booksearch.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.codepath.android.booksearch.R;
@@ -46,6 +49,14 @@ public class BookListActivity extends AppCompatActivity {
         bookAdapter = new BookAdapter(this, aBooks);
         // attach the adapter to the ListView
         lvBooks.setAdapter(bookAdapter);
+        lvBooks.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(BookListActivity.this, BookDetailActivity.class);
+                intent.putExtra("BookDetail", (Book)lvBooks.getItemAtPosition(i));
+                startActivity(intent);
+            }
+        });
         // Fetch the data remotely
         fetchBooks("Oscar Wilde");
     }

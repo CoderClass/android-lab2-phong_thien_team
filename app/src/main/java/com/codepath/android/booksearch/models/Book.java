@@ -1,5 +1,7 @@
 package com.codepath.android.booksearch.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import org.json.JSONArray;
@@ -8,10 +10,34 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Book {
+public class Book implements Parcelable{
     private String openLibraryId;
     private String author;
     private String title;
+    private String publisher;
+    private String publish_year;
+
+
+    protected Book(Parcel in) {
+        openLibraryId = in.readString();
+        author = in.readString();
+        title = in.readString();
+    }
+
+
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
+
+    public Book() {
+    }
 
     public String getOpenLibraryId() {
         return openLibraryId;
@@ -44,6 +70,7 @@ public class Book {
             }
             book.title = jsonObject.has("title_suggest") ? jsonObject.getString("title_suggest") : "";
             book.author = getAuthor(jsonObject);
+            book.publish_year =
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -86,5 +113,21 @@ public class Book {
             }
         }
         return books;
+    }
+
+    @Override public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(getOpenLibraryId());
+        parcel.writeString(getAuthor());
+        parcel.writeString(getTitle());
+
+
+    }
+
+    public String getPublish_year() {
+        return publish_year;
     }
 }
