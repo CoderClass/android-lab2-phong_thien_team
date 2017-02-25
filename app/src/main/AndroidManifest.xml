@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/ActionBarStyle"
             android:name=".activities.BookDetailActivity"
             android:label="@string/title_activity_book_detail" >
         </activity>

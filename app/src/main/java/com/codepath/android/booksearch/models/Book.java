@@ -15,26 +15,32 @@ public class Book implements Parcelable{
     private String author;
     private String title;
     private String publisher;
-    private String publish_year;
-
 
     protected Book(Parcel in) {
         openLibraryId = in.readString();
         author = in.readString();
         title = in.readString();
+        publisher = in.readString();
+        publish_year = in.readString();
     }
 
-
-
     public static final Creator<Book> CREATOR = new Creator<Book>() {
-        @Override public Book createFromParcel(Parcel in) {
+        @Override
+        public Book createFromParcel(Parcel in) {
             return new Book(in);
         }
 
-        @Override public Book[] newArray(int size) {
+        @Override
+        public Book[] newArray(int size) {
             return new Book[size];
         }
     };
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    private String publish_year;
 
     public Book() {
     }
@@ -70,7 +76,9 @@ public class Book implements Parcelable{
             }
             book.title = jsonObject.has("title_suggest") ? jsonObject.getString("title_suggest") : "";
             book.author = getAuthor(jsonObject);
-            book.publish_year =
+            book.publish_year = jsonObject.getJSONArray("publish_year").get(0).toString();
+//            jsonObject.get("publisher").get
+            book.publisher = jsonObject.getJSONArray("publisher").get(0).toString();
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
@@ -115,19 +123,22 @@ public class Book implements Parcelable{
         return books;
     }
 
-    @Override public int describeContents() {
-        return 0;
-    }
-
-    @Override public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(getOpenLibraryId());
-        parcel.writeString(getAuthor());
-        parcel.writeString(getTitle());
-
-
-    }
 
     public String getPublish_year() {
         return publish_year;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(openLibraryId);
+        dest.writeString(author);
+        dest.writeString(title);
+        dest.writeString(publisher);
+        dest.writeString(publish_year);
     }
 }
